@@ -54,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     AudioManager audioManager;
     int position = 1;
 
+    public  String EXTERN_SD_FILES_PATH = "/mnt/external_sd";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onPrepared(MediaPlayer mp) {
                 mp.setLooping(true);
+                mp.seekTo(position);
             }
         });
         videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -110,7 +113,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         position = videoView.getCurrentPosition();
                     }
                     else {
-                        videoView.seekTo(position);
                         videoView.start();
                     }
                 }
@@ -119,7 +121,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         volumeLayout.setRotation(270.0f);
-
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         seekbar.setMaxValue(audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC));
         seekbar.setMinStartValue(0);
@@ -214,6 +215,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         else {
 
+            //removableStoragePath = EXTERN_SD_FILES_PATH; // android 4.4 Device
             Uri uri;
             if (BuildConfig.FLAVOR.equals("loopvideo")){
                 uri = Uri.parse(removableStoragePath + "/looping_video.mp4");
